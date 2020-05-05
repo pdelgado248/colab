@@ -138,7 +138,9 @@ def image_sizes_for_dataset_name(dataset_name):
 class MainLoop(object):
     def __init__(self, dataset_name, input_image_folder, output_folder, model_file_name, num_embeddings, num_frames):
         self.dataset_name = dataset_name
-        self.sess = tf.Session()
+        #~~
+        self.sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+        #~~
         self.coord = tf.train.Coordinator()
         self.image_prefix = 'mask'
         self.track_file_name = 'res_track.txt'
@@ -251,6 +253,9 @@ class MainLoop(object):
                 for i in range(len(self.lstm_input_states_cropped_val)):
                     feed_dict[self.lstm_input_states_cropped_val[i]] = current_lstm_states[state_index][i]
             run_tuple = self.sess.run(fetches, feed_dict)
+            #~~
+            print(run_tuple)
+            #~~
             image_tiler.set_current_data(current_image)
             for i, embeddings_tiler in enumerate(embeddings_tilers):
                 embeddings = np.squeeze(run_tuple[i], axis=0)
