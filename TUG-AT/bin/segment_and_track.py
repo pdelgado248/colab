@@ -17,6 +17,11 @@ from bin.clustering import InstanceImageCreator, InstanceMerger, InstanceTracker
 from glob import glob
 
 
+#~~
+from tensorflow.python.client import device_lib
+#~~
+
+
 def get_dataset_parameters(dataset_name):
     normalization_consideration_factors = {'DIC-C2DH-HeLa': (0.001, 0.001),
                                            'Fluo-C2DL-MSC': (0.001, 0.001),
@@ -139,7 +144,7 @@ class MainLoop(object):
     def __init__(self, dataset_name, input_image_folder, output_folder, model_file_name, num_embeddings, num_frames):
         self.dataset_name = dataset_name
         #~~
-        self.sess = tf.Session(config=tf.ConfigProto(log_device_placement=True,allow_soft_placement=True))
+        self.sess = tf.Session(config=tf.ConfigProto(log_device_placement=False,allow_soft_placement=True))
         #~~
         self.coord = tf.train.Coordinator()
         self.image_prefix = 'mask'
@@ -254,6 +259,7 @@ class MainLoop(object):
                     feed_dict[self.lstm_input_states_cropped_val[i]] = current_lstm_states[state_index][i]
             run_tuple = self.sess.run(fetches, feed_dict)
             #~~
+            device_lib.list_local_devices()
             #print(run_tuple)
             #~~
             image_tiler.set_current_data(current_image)
