@@ -254,7 +254,7 @@ class MainLoop(object):
                     feed_dict[self.lstm_input_states_cropped_val[i]] = current_lstm_states[state_index][i]
             run_tuple = self.sess.run(fetches, feed_dict)
             #~~
-            print(run_tuple)
+            #print(run_tuple)
             #~~
             image_tiler.set_current_data(current_image)
             for i, embeddings_tiler in enumerate(embeddings_tilers):
