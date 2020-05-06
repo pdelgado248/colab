@@ -139,7 +139,7 @@ class MainLoop(object):
     def __init__(self, dataset_name, input_image_folder, output_folder, model_file_name, num_embeddings, num_frames):
         self.dataset_name = dataset_name
         #~~
-        self.sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+        self.sess = tf.Session(config=tf.ConfigProto(log_device_placement=True,allow_soft_placement=True))
         #~~
         self.coord = tf.train.Coordinator()
         self.image_prefix = 'mask'
@@ -383,11 +383,14 @@ if __name__ == '__main__':
     model_file_name = sys.argv[3]
     dataset_name = sys.argv[4]
 
-    loop = MainLoop(dataset_name,
-                    input_image_folder,
-                    output_folder,
-                    model_file_name,
-                    embedding_size,
-                    num_frames)
-    loop.run_test()
+#~~
+    with tf.device("/gpu:0"):
+#~~
+      loop = MainLoop(dataset_name,
+                      input_image_folder,
+                      output_folder,
+                      model_file_name,
+                      embedding_size,
+                      num_frames)
+      loop.run_test()
 
